@@ -20,8 +20,28 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.firefly.rpc</groupId>
-            <artifactId>rpc-client</artifactId>
+            <artifactId>rpc-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.firefly.rpc</groupId>
+            <artifactId>rpc-facade</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.firefly.rpc</groupId>
+            <artifactId>rpc-registry</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.firefly.rpc</groupId>
+            <artifactId>rpc-protocol</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
 </project>
