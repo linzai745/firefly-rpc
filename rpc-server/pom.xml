@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>firefly-rpc</artifactId>
-        <groupId>com.firefly</groupId>
+        <groupId>com.firefly.rpc</groupId>
         <version>0.0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>rpc-provider</artifactId>
+    <artifactId>rpc-server</artifactId>
     <name>RPC Service Provider</name>
     <description>Service provider, responsible for publishing RPC services, receiving and processing RPC requests.</description>
     <properties>

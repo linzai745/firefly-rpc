@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>firefly-rpc</artifactId>
-        <groupId>com.firefly</groupId>
+        <groupId>com.firefly.rpc</groupId>
         <version>0.0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>rpc-consumer</artifactId>
+    <artifactId>rpc-client</artifactId>
     <version>0.0.1</version>
     <name>RPC Service Consumer</name>
     <description>RPC Service Consumer, RPC remote calls are made using dynamic proxies to help the consumer mask the details of the underlying network communication.</description>
@@ -18,4 +18,10 @@
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.firefly.rpc</groupId>
+            <artifactId>rpc-client</artifactId>
+        </dependency>
+    </dependencies>
 </project>
