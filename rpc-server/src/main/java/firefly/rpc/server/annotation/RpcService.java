@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Component
 public @interface RpcService {
     
-    Class<?> serviceType() default Object.class;
+    Class<?> serviceInterface() default Object.class;
     
     String serviceVersion() default "1.0";
     
