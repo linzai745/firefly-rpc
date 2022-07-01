@@ -11,7 +11,6 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.channel.socket.nio.NioSocketChannel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
@@ -22,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-public class RpcServer implements InitializingBean, BeanPostProcessor {
+public class ServicePublisher implements InitializingBean, BeanPostProcessor {
     
     private String serverAddress;
     private final int serverPort;
@@ -30,7 +29,7 @@ public class RpcServer implements InitializingBean, BeanPostProcessor {
     
     private final Map<String, Object> rpcServiceMap = new HashMap<>();
     
-    public RpcServer(int serverPort, RegistryService serviceRegistry) {
+    public ServicePublisher(int serverPort, RegistryService serviceRegistry) {
         this.serverPort = serverPort;
         this.serviceRegistry = serviceRegistry;
     }

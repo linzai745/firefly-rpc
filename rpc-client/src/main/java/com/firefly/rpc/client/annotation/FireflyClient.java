@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 @Autowired
-public @interface RpcClient {
+public @interface FireflyClient {
 
     String serviceVersion() default "1.0";
 

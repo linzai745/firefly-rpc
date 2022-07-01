@@ -9,11 +9,11 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class RpcConsumer {
+public class FireflyConsumer {
     private final Bootstrap bootstrap;
     private final EventLoopGroup eventLoopGroup;
 
-    public RpcConsumer() {
+    public FireflyConsumer() {
         bootstrap = new Bootstrap();
         eventLoopGroup = new NioEventLoopGroup(4);
         bootstrap.group(eventLoopGroup).channel(NioSocketChannel.class)
@@ -24,4 +24,6 @@ public class RpcConsumer {
                     }
                 });
     }
+    
+    
 }
