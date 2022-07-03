@@ -2,7 +2,7 @@ package com.firefly.rpc.client;
 
 import com.firefly.rpc.client.annotation.FireflyClient;
 import com.firefly.rpc.client.invoker.FireflyFactoryBean;
-import firefly.rpc.core.FireflyConstant;
+import firefly.rpc.core.FireflyConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanClassLoaderAware;
@@ -81,12 +81,12 @@ public class FireflyClientPostProcessor implements ApplicationContextAware, Bean
         FireflyClient annotation = AnnotationUtils.getAnnotation(field, FireflyClient.class);
         if (annotation == null) return;
         BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(FireflyFactoryBean.class)
-                .setInitMethodName(FireflyConstant.INIT_METHOD_NAME)
-                .addPropertyValue(FireflyConstant.REFERENCE_INTERFACE_FIELD, field.getType())
-                .addPropertyValue(FireflyConstant.REFERENCE_SERVICE_VERSION_FIELD, annotation.serviceVersion())
-                .addPropertyValue(FireflyConstant.REFERENCE_REGISTRY_TYPE_FIELD, annotation.registryType())
-                .addPropertyValue(FireflyConstant.REFERENCE_REGISTRY_ADDRESS_FIELD, annotation.registryAddress())
-                .addPropertyValue(FireflyConstant.REFERENCE_TIMEOUT_FIELD, annotation.timeout());
+                .setInitMethodName(FireflyConstants.INIT_METHOD_NAME)
+                .addPropertyValue(FireflyConstants.REFERENCE_INTERFACE_FIELD, field.getType())
+                .addPropertyValue(FireflyConstants.REFERENCE_SERVICE_VERSION_FIELD, annotation.serviceVersion())
+                .addPropertyValue(FireflyConstants.REFERENCE_REGISTRY_TYPE_FIELD, annotation.registryType())
+                .addPropertyValue(FireflyConstants.REFERENCE_REGISTRY_ADDRESS_FIELD, annotation.registryAddress())
+                .addPropertyValue(FireflyConstants.REFERENCE_TIMEOUT_FIELD, annotation.timeout());
     
         AbstractBeanDefinition beanDefinition = builder.getBeanDefinition();
         rpcRefBeanDefinitions.put(field.getName(), beanDefinition);
