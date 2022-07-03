@@ -47,6 +47,7 @@ public class ServicePublisher implements InitializingBean, BeanPostProcessor {
     
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        log.info("register service {}.", beanName);
         if (bean.getClass().isAnnotationPresent(RpcService.class)) {
             RpcService rpcService = bean.getClass().getAnnotation(RpcService.class);
             String serviceName = rpcService.serviceInterface().getName();

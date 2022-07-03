@@ -7,9 +7,8 @@
         <module>rpc-server</module>
         <module>rpc-core</module>
         <module>rpc-registry</module>
-        <module>rpc-test</module>
-        <module>rpc-facade</module>
         <module>rpc-protocol</module>
+        <module>rpc-server-example</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -47,11 +46,6 @@
             </dependency>
             <dependency>
                 <groupId>com.firefly.rpc</groupId>
-                <artifactId>rpc-facade</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.firefly.rpc</groupId>
                 <artifactId>rpc-protocol</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -60,11 +54,7 @@
                 <artifactId>rpc-registry</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.firefly.rpc</groupId>
-                <artifactId>rpc-test</artifactId>
-                <version>${project.version}</version>
-            </dependency>
+
             <dependency>
                 <groupId>io.netty</groupId>
                 <artifactId>netty-all</artifactId>
@@ -113,14 +103,6 @@
         </dependencies>
     </dependencyManagement>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
     <repositories>
         <repository>
             <id>spring-milestones</id>
