@@ -62,8 +62,6 @@ public class FireflyClientPostProcessor implements ApplicationContextAware, Bean
             registry.registerBeanDefinition(beanName, beanDefinition);
             log.info("registered FireflyReferenceBean {} success.", beanName);
         });
-        
-        // 此处考虑是否需要把rpcRefBeanDefinitions GC. TODO
     }
     
     @Override

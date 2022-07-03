@@ -2,6 +2,7 @@ package firefly.rpc.handler;
 
 import firefly.rpc.core.FireflyRpcRequest;
 import firefly.rpc.core.FireflyRpcResponse;
+import firefly.rpc.core.ServiceHelper;
 import firefly.rpc.protocol.FireflyRpcProtocol;
 import firefly.rpc.protocol.MsgHeader;
 import firefly.rpc.protocol.MsgStatus;
@@ -9,6 +10,7 @@ import firefly.rpc.protocol.MsgType;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cglib.reflect.FastClass;
 
 import java.util.Map;
 
@@ -31,9 +33,7 @@ public class FireflyRequestHandler extends SimpleChannelInboundHandler<FireflyRp
             resProtocol.setHeader(header);
             resProtocol.setBody(response);
             try {
-                // TODO, proxy invoke target method
-                // handle();
-                Object result = null;
+                Object result = handle(protocol.getBody());
                 response.setData(result);
                 header.setStatus((byte) MsgStatus.SUCCESS.getCode());
             } catch (Throwable throwable) {
@@ -43,5 +43,19 @@ public class FireflyRequestHandler extends SimpleChannelInboundHandler<FireflyRp
             }
             ctx.writeAndFlush(resProtocol);
         });
+    }
+    
+    private Object handle(FireflyRpcRequest request) throws Throwable {
+        String serviceKey = ServiceHelper.buildServiceKey(request.getClassName(), request.getServiceVersion());
+        Object serviceBean = rpcServiceMap.get(serviceKey);
+        if (serviceBean == null)
+            throw new RuntimeException(String.format("service not exist: %s:%s", request.getClassName(), request.getMethodName()));
+        Class<?> serviceClass = serviceBean.getClass();
+        String methodName = request.getMethodName();
+        Class<?>[] parameterTypes = request.getParameterTypes();
+        Object[] params = request.getParams();
+        FastClass fastClass = FastClass.create(serviceClass);
+        int methodIndex = fastClass.getIndex(methodName, parameterTypes);
+        return fastClass.invoke(methodIndex, serviceBean, params);
     }
 }
