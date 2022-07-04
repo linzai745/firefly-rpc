@@ -29,7 +29,6 @@ import java.util.Map;
  * 使用 BeanFactoryPostProcessor 自定义FireflyFactoryBean 的Bean属性
  */
 
-@Component
 @Slf4j
 public class FireflyClientPostProcessor implements ApplicationContextAware, BeanClassLoaderAware, BeanFactoryPostProcessor {
     private ClassLoader classLoader;

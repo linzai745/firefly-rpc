@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.firefly.rpc.client.config.InitClientConfiguration

@@ -9,6 +9,7 @@
         <module>rpc-registry</module>
         <module>rpc-protocol</module>
         <module>rpc-server-example</module>
+        <module>rpc-client-example</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
