@@ -43,21 +43,19 @@ public class FireflyConsumer {
         Object[] params = request.getParams();
         String serviceKey = ServiceHelper.buildServiceKey(request.getClassName(), request.getServiceVersion());
         
-        int invokeHashCode = params.length > 0 ? params[0].hashCode() : serviceKey.hashCode();
+        int invokeHashCode = params != null && params.length > 0 ? params[0].hashCode() : serviceKey.hashCode();
         ServiceMeta serviceMetaData = registryService.discovery(serviceKey, invokeHashCode);
         
-        if (serviceMetaData != null) {
-            ChannelFuture future = bootstrap.connect(serviceMetaData.getServiceAddr(), serviceMetaData.getServicePort()).sync();
-            future.addListener((ChannelFutureListener) arg0 -> {
-                if (future.isSuccess()) {
-                    log.info("connect rpc service {} on port {} success.", serviceMetaData.getServiceAddr(), serviceMetaData.getServicePort());
-                } else {
-                    log.error("connect rpc server {} on port {} failed.", serviceMetaData.getServiceAddr(), serviceMetaData.getServicePort());
-                    future.cause().printStackTrace();
-                    eventLoopGroup.shutdownGracefully();
-                }
-            });
-            future.channel().writeAndFlush(protocol);
-        }
+        ChannelFuture future = bootstrap.connect(serviceMetaData.getServiceAddr(), serviceMetaData.getServicePort()).sync();
+        future.addListener((ChannelFutureListener) arg0 -> {
+            if (future.isSuccess()) {
+                log.info("connect rpc service {} on port {} success.", serviceMetaData.getServiceAddr(), serviceMetaData.getServicePort());
+            } else {
+                log.error("connect rpc server {} on port {} failed.", serviceMetaData.getServiceAddr(), serviceMetaData.getServicePort());
+                future.cause().printStackTrace();
+                eventLoopGroup.shutdownGracefully();
+            }
+        });
+        future.channel().writeAndFlush(protocol);
     }
 }

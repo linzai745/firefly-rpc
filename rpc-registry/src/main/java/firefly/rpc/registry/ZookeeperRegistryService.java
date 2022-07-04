@@ -2,7 +2,8 @@ package firefly.rpc.registry;
 
 import firefly.rpc.core.ServiceHelper;
 import firefly.rpc.core.ServiceMeta;
-import firefly.rpc.registry.loadbalancer.ServiceLoadBalancer;
+import firefly.rpc.core.exception.ExceptionType;
+import firefly.rpc.core.exception.FireflyException;
 import firefly.rpc.registry.loadbalancer.ZKConsistentHashLoadBalancer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.framework.CuratorFramework;
@@ -66,9 +67,9 @@ public class ZookeeperRegistryService implements RegistryService {
         Collection<ServiceInstance<ServiceMeta>> services = serviceDiscovery.queryForInstances(serviceName);
         ZKConsistentHashLoadBalancer loadBalancer = new ZKConsistentHashLoadBalancer();
         ServiceInstance<ServiceMeta> instance = loadBalancer.select((List<ServiceInstance<ServiceMeta>>) services, invokeHashCode);
-        if (instance != null)
-            return instance.getPayload();
-        return null;
+        if (instance == null)
+            throw new FireflyException(ExceptionType.SERVICE_NOT_FOUND);
+        return instance.getPayload();
     }
     
     @Override
