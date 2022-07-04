@@ -41,7 +41,7 @@ public class FireflyConsumer {
     public void sendRequest(FireflyRpcProtocol<FireflyRpcRequest> protocol, RegistryService registryService) throws Exception {
         FireflyRpcRequest request = protocol.getBody();
         Object[] params = request.getParams();
-        String serviceKey = ServiceHelper.buildServiceKey(request.getClassName(), request.getServiceVersion());
+        String serviceKey = ServiceHelper.buildServiceKey(request.getApplicationName(), request.getServiceName(), request.getServiceVersion());
         
         int invokeHashCode = params != null && params.length > 0 ? params[0].hashCode() : serviceKey.hashCode();
         ServiceMeta serviceMetaData = registryService.discovery(serviceKey, invokeHashCode);

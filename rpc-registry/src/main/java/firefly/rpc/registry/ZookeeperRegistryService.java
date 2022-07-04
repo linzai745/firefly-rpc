@@ -43,7 +43,7 @@ public class ZookeeperRegistryService implements RegistryService {
     @Override
     public void register(ServiceMeta serviceMeta) throws Exception {
         ServiceInstance<ServiceMeta> serviceInstance = ServiceInstance.<ServiceMeta>builder()
-                .name(ServiceHelper.buildServiceKey(serviceMeta.getServiceName(), serviceMeta.getServiceVersion()))
+                .name(ServiceHelper.buildServiceKey(serviceMeta.getApplicationId(), serviceMeta.getServiceName(), serviceMeta.getServiceVersion()))
                 .address(serviceMeta.getServiceAddr())
                 .port(serviceMeta.getServicePort())
                 .payload(serviceMeta)
@@ -54,7 +54,7 @@ public class ZookeeperRegistryService implements RegistryService {
     @Override
     public void unRegister(ServiceMeta serviceMeta) throws Exception {
         ServiceInstance<ServiceMeta> serviceInstance = ServiceInstance.<ServiceMeta>builder()
-                .name(ServiceHelper.buildServiceKey(serviceMeta.getServiceName(), serviceMeta.getServiceVersion()))
+                .name(ServiceHelper.buildServiceKey(serviceMeta.getApplicationId(), serviceMeta.getServiceName(), serviceMeta.getServiceVersion()))
                 .address(serviceMeta.getServiceAddr())
                 .port(serviceMeta.getServicePort())
                 .payload(serviceMeta)

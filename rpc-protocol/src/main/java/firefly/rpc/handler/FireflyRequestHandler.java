@@ -46,7 +46,7 @@ public class FireflyRequestHandler extends SimpleChannelInboundHandler<FireflyRp
     }
     
     private Object handle(FireflyRpcRequest request) throws Throwable {
-        String serviceKey = ServiceHelper.buildServiceKey(request.getClassName(), request.getServiceVersion());
+        String serviceKey = ServiceHelper.buildServiceKey(request.getApplicationName(), request.getServiceName(), request.getServiceVersion());
         Object serviceBean = rpcServiceMap.get(serviceKey);
         if (serviceBean == null)
             throw new RuntimeException(String.format("service not exist: %s:%s", request.getClassName(), request.getMethodName()));

@@ -12,6 +12,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FireflyRpcRequest implements Serializable {
+    private String applicationName;
+    private String serviceName;
     private String serviceVersion;
     private String className;
     private String methodName;

@@ -18,23 +18,31 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-public class ServicePublisher implements InitializingBean, BeanPostProcessor {
+public class ServicePublisher implements InitializingBean, BeanPostProcessor, ApplicationContextAware {
     
     private String serverAddress;
     private final int serverPort;
     private final RegistryService serviceRegistry;
+    private ApplicationContext context;
     
     private final Map<String, Object> rpcServiceMap = new HashMap<>();
     
     public ServicePublisher(int serverPort, RegistryService serviceRegistry) {
         this.serverPort = serverPort;
         this.serviceRegistry = serviceRegistry;
+    }
+    
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.context = applicationContext;
     }
     
     @Override
@@ -48,23 +56,34 @@ public class ServicePublisher implements InitializingBean, BeanPostProcessor {
         }).start();
     }
     
+    /**
+     * service key conclude applicationName:serviceSimpleName:serviceVersion:#num
+     * @param bean
+     * @param beanName
+     * @return
+     * @throws BeansException
+     */
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         if (bean.getClass().isAnnotationPresent(RpcService.class)) {
             log.info("register service {}.", beanName);
+            String applicationId = context.getId();
             RpcService rpcService = bean.getClass().getAnnotation(RpcService.class);
-            String serviceName = rpcService.serviceInterface().getName();
+            String serviceName = rpcService.serviceInterface().getSimpleName();
+            String className = rpcService.serviceInterface().getName();
             String serviceVersion = rpcService.serviceVersion();
     
             ServiceMeta serviceMeta = ServiceMeta.builder()
                     .serviceAddr(this.serverAddress)
                     .servicePort(this.serverPort)
+                    .applicationId(applicationId)
                     .serviceName(serviceName)
+                    .className(className)
                     .serviceVersion(serviceVersion)
                     .build();
             try {
                 serviceRegistry.register(serviceMeta);
-                rpcServiceMap.put(ServiceHelper.buildServiceKey(serviceName, serviceVersion), bean);
+                rpcServiceMap.put(ServiceHelper.buildServiceKey(applicationId, serviceName, serviceVersion), bean);
             } catch (Exception e) {
                 log.error("failed to register service {}#{}", serviceName, serviceVersion, e);
             }
@@ -93,7 +112,7 @@ public class ServicePublisher implements InitializingBean, BeanPostProcessor {
                     .childOption(ChannelOption.SO_KEEPALIVE, true);
         
             ChannelFuture channelFuture = serverBootstrap.bind(this.serverAddress, this.serverPort).sync();
-            log.info("server address {} started on port {}", this.serverAddress, this.serverPort);
+            log.info("firefly server address {} started on port {}", this.serverAddress, this.serverPort);
             channelFuture.channel().closeFuture().sync();
         } finally {
             boss.shutdownGracefully();

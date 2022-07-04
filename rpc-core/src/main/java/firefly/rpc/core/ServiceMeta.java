@@ -11,7 +11,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ServiceMeta {
     
+    private String applicationId;
+    
     private String serviceName;
+    
+    private String className;
     
     private String serviceVersion;
     
