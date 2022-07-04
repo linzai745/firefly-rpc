@@ -1,7 +1,10 @@
 package firefly.rpc.server;
 
+import firefly.rpc.codec.FireflyRpcDecoder;
+import firefly.rpc.codec.FireflyRpcEncoder;
 import firefly.rpc.core.ServiceHelper;
 import firefly.rpc.core.ServiceMeta;
+import firefly.rpc.handler.FireflyRequestHandler;
 import firefly.rpc.registry.RegistryService;
 import firefly.rpc.server.annotation.RpcService;
 import io.netty.bootstrap.ServerBootstrap;
@@ -42,13 +45,13 @@ public class ServicePublisher implements InitializingBean, BeanPostProcessor {
             } catch (Exception e) {
                 log.error("start rpc server error.", e);
             }
-        });
+        }).start();
     }
     
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        log.info("register service {}.", beanName);
         if (bean.getClass().isAnnotationPresent(RpcService.class)) {
+            log.info("register service {}.", beanName);
             RpcService rpcService = bean.getClass().getAnnotation(RpcService.class);
             String serviceName = rpcService.serviceInterface().getName();
             String serviceVersion = rpcService.serviceVersion();
@@ -81,12 +84,15 @@ public class ServicePublisher implements InitializingBean, BeanPostProcessor {
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            // todo, add channel pipeline handlers
+                            socketChannel.pipeline()
+                                    .addLast(new FireflyRpcEncoder())
+                                    .addLast(new FireflyRpcDecoder())
+                                    .addLast(new FireflyRequestHandler(rpcServiceMap));
                         }
                     })
                     .childOption(ChannelOption.SO_KEEPALIVE, true);
         
-            ChannelFuture channelFuture = serverBootstrap.bind().sync();
+            ChannelFuture channelFuture = serverBootstrap.bind(this.serverAddress, this.serverPort).sync();
             log.info("server address {} started on port {}", this.serverAddress, this.serverPort);
             channelFuture.channel().closeFuture().sync();
         } finally {

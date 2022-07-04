@@ -4,7 +4,7 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Data
-@ConfigurationProperties(prefix = "rpc")
+@ConfigurationProperties(prefix = "firefly.rpc")
 public class FireflyRpcProps {
     private int servicePort;
     private String registryAddr;
