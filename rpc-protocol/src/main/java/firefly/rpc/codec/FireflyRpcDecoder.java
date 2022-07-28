@@ -39,8 +39,8 @@ public class FireflyRpcDecoder extends ByteToMessageDecoder {
         byte serializeType = in.readByte();
         byte msgType = in.readByte();
         byte status = in.readByte();
-        byte requestId = in.readByte();
-        byte dataLength = in.readByte();
+        long requestId = in.readLong();
+        int dataLength = in.readInt();
         
         if (in.readableBytes() < dataLength) {
             in.resetReaderIndex();

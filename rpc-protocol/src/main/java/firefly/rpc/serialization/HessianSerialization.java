@@ -1,8 +1,8 @@
 package firefly.rpc.serialization;
 
-import com.caucho.hessian.io.Deflation;
 import com.caucho.hessian.io.Hessian2Input;
 import com.caucho.hessian.io.Hessian2Output;
+import com.caucho.hessian.io.SerializerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -14,11 +14,11 @@ public class HessianSerialization implements FireflyRpcSerialization {
             throw new NullPointerException();
         byte[] result;
         try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
-            Deflation envelope = new Deflation();
             Hessian2Output out = new Hessian2Output(os);
-            out = envelope.wrap(out);
+            out.setSerializerFactory(new SerializerFactory());
             out.startMessage();
             out.writeObject(obj);
+            out.flush();
             out.completeMessage();
             result = os.toByteArray();
         } catch (Exception e) {
@@ -35,8 +35,7 @@ public class HessianSerialization implements FireflyRpcSerialization {
         T result;
         try (ByteArrayInputStream is = new ByteArrayInputStream(data)) {
             Hessian2Input in = new Hessian2Input(is);
-            Deflation envelope = new Deflation();
-            in = envelope.unwrap(in);
+            in.setSerializerFactory(new SerializerFactory());
             in.startMessage();
             result = (T) in.readObject(clz);
             in.completeMessage();
