@@ -51,8 +51,9 @@ public class FireflyRpcDecoder extends ByteToMessageDecoder {
         in.readBytes(data);
     
         MsgType msgTypeEnum = MsgType.findByType(msgType);
-        if (msgTypeEnum == null)
+        if (msgTypeEnum == null) {
             return;
+        }
     
         MsgHeader header = MsgHeader.builder()
                 .magic(magic)

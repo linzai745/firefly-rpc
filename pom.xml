@@ -8,8 +8,8 @@
         <module>rpc-core</module>
         <module>rpc-registry</module>
         <module>rpc-protocol</module>
-        <module>rpc-server-example</module>
-        <module>rpc-client-example</module>
+        <module>firefly-config</module>
+        <module>firefly-common</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
